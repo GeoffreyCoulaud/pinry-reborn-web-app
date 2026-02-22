@@ -1,6 +1,8 @@
-<h1 class="text-2xl font-bold">Welcome to Pinry</h1>
+<script lang="ts">
+	import { m } from '$lib/paraglide/messages.js';
+</script>
+
+<h1 class="text-2xl font-bold">{m.home_title()}</h1>
 <p class="mt-2 text-gray-600">
-	A clean SvelteKit scaffold. Check out the
-	<a href="/example" class="underline">example page</a>
-	to see the store → component pattern in action.
+	{@html m.home_description({ link: `<a href="/example" class="underline">${m.home_example_link()}</a>` })}
 </p>

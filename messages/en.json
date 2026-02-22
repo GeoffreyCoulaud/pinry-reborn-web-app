@@ -1,0 +1,10 @@
+{
+  "nav_brand": "Pinry",
+  "nav_example": "Example",
+  "home_title": "Welcome to Pinry",
+  "home_description": "A clean SvelteKit scaffold. Check out the {link} to see the store to component pattern in action.",
+  "home_example_link": "example page",
+  "example_title": "Example Pins",
+  "example_pins_loaded": "{count} pins loaded",
+  "pin_untitled": "Untitled Pin"
+}

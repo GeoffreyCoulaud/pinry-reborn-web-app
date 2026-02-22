@@ -8,6 +8,7 @@
  */
 
 import type { Pin } from '$lib/types';
+import { m } from '$lib/paraglide/messages.js';
 
 /** Return only pins that have a description. */
 export function filterPinsWithDescription(pins: Pin[]): Pin[] {
@@ -16,5 +17,5 @@ export function filterPinsWithDescription(pins: Pin[]): Pin[] {
 
 /** Build a display title from a pin. */
 export function formatPinTitle(pin: Pin): string {
-	return pin.title.trim() || 'Untitled Pin';
+	return pin.title.trim() || m.pin_untitled();
 }
