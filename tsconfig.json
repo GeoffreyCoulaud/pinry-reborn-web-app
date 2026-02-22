@@ -14,5 +14,5 @@
 		"allowJs": true,
 		"checkJs": false
 	},
-	"include": ["src/**/*.ts", "src/**/*.svelte", "src/**/*.js"]
+	"include": ["src/**/*.ts", "src/**/*.svelte", "src/**/*.js", ".svelte-kit/ambient.d.ts"]
 }

@@ -6,5 +6,15 @@
   "home_example_link": "example page",
   "example_title": "Example Pins",
   "example_pins_loaded": "{count} pins loaded",
-  "pin_untitled": "Untitled Pin"
+  "pin_untitled": "Untitled Pin",
+  "auth_login": "Log in",
+  "auth_signup": "Sign up",
+  "auth_logout": "Log out",
+  "auth_username": "Username",
+  "auth_password": "Password",
+  "auth_logging_out": "Logging out…",
+  "auth_error_missing_fields": "Please enter both username and password.",
+  "auth_error_invalid_credentials": "Invalid username or password.",
+  "auth_error_username_taken": "That username is already taken.",
+  "auth_error_server_error": "Something went wrong. Please try again."
 }

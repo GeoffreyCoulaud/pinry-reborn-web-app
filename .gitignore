@@ -3,3 +3,4 @@ build/
 .svelte-kit
 src/lib/paraglide/
 .worktrees/
+.env

@@ -10,3 +10,8 @@ export interface Pin {
 	imageUrl: string;
 	description?: string;
 }
+
+export interface UserResponse {
+	id: string;
+	name: string;
+}
