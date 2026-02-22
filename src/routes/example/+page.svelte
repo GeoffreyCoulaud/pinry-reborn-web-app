@@ -25,7 +25,7 @@
 </script>
 
 <h1 class="text-2xl font-bold">{m.example_title()}</h1>
-<p class="mt-1 text-sm text-gray-500">{m.example_pins_loaded({ count: String(pinStore.count) })}</p>
+<p class="mt-1 text-sm text-text-muted">{m.example_pins_loaded({ count: String(pinStore.count) })}</p>
 
 <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 	{#each pinStore.pins as pin (pin.id)}

@@ -1,1 +1,45 @@
 @import 'tailwindcss';
+
+/* Light mode tokens (default) */
+:root {
+  --app-bg: #f9fafb;
+  --app-surface: #ffffff;
+  --app-surface-hover: #f3f4f6;
+  --app-border: #e5e7eb;
+  --app-border-muted: #d1d5db;
+  --app-text: #111827;
+  --app-text-muted: #6b7280;
+  --app-text-subtle: #9ca3af;
+  --app-accent: #2563eb;
+  --app-accent-hover: #1d4ed8;
+}
+
+/* Dark mode tokens */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --app-bg: #0f172a;
+    --app-surface: #1e293b;
+    --app-surface-hover: #334155;
+    --app-border: #334155;
+    --app-border-muted: #475569;
+    --app-text: #f1f5f9;
+    --app-text-muted: #94a3b8;
+    --app-text-subtle: #64748b;
+    --app-accent: #60a5fa;
+    --app-accent-hover: #93bbfd;
+  }
+}
+
+/* Register as Tailwind utilities — "inline" ensures var() refs resolve at runtime */
+@theme inline {
+  --color-bg: var(--app-bg);
+  --color-surface: var(--app-surface);
+  --color-surface-hover: var(--app-surface-hover);
+  --color-border: var(--app-border);
+  --color-border-muted: var(--app-border-muted);
+  --color-text: var(--app-text);
+  --color-text-muted: var(--app-text-muted);
+  --color-text-subtle: var(--app-text-subtle);
+  --color-accent: var(--app-accent);
+  --color-accent-hover: var(--app-accent-hover);
+}
