@@ -9,6 +9,7 @@ export interface Pin {
 	sourceMediaUrl: string;
 	description: string;
 	tags: Tag[];
+	softDeletedAt: string | null;
 }
 
 export interface PinPage {

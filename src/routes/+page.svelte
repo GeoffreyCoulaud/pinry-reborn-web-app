@@ -49,8 +49,15 @@
 		extraPins = [pin, ...extraPins];
 	}
 
+	function handlePinDeleted(e: Event) {
+		const pin = (e as CustomEvent<Pin>).detail;
+		extraPins = extraPins.filter((p) => p.id !== pin.id);
+		data.pins = data.pins.filter((p) => p.id !== pin.id);
+	}
+
 	onMount(() => {
 		window.addEventListener('pin-created', handlePinCreated);
+		window.addEventListener('pin-deleted', handlePinDeleted);
 
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -68,6 +75,7 @@
 
 		return () => {
 			window.removeEventListener('pin-created', handlePinCreated);
+			window.removeEventListener('pin-deleted', handlePinDeleted);
 			observer.disconnect();
 		};
 	});

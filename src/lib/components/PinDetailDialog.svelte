@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Dialog } from 'bits-ui';
+	import { toast } from 'svelte-sonner';
+	import { m } from '$lib/paraglide/messages.js';
 	import PinDetail from './PinDetail.svelte';
 	import type { Pin } from '$lib/types';
 
@@ -12,6 +14,19 @@
 		open: boolean;
 		onclose: () => void;
 	} = $props();
+
+	async function handleDelete() {
+		try {
+			const res = await fetch(`/api/pins/${pin.id}`, { method: 'DELETE' });
+			if (!res.ok) throw new Error();
+			toast.success(m.pin_deleted());
+			open = false;
+			onclose();
+			window.dispatchEvent(new CustomEvent('pin-deleted', { detail: pin }));
+		} catch {
+			toast.error(m.pin_delete_error());
+		}
+	}
 </script>
 
 <Dialog.Root bind:open onOpenChange={(v) => { if (!v) onclose(); }}>
@@ -28,7 +43,7 @@
 				&#10005;
 			</Dialog.Close>
 
-			<PinDetail {pin} />
+			<PinDetail {pin} ondelete={handleDelete} />
 		</Dialog.Content>
 	</Dialog.Portal>
 </Dialog.Root>

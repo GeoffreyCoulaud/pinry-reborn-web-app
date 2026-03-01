@@ -82,3 +82,51 @@ export async function searchTags(
 	const data = await res.json();
 	return data.results;
 }
+
+export async function softDeletePin(credentials: string, pinId: string): Promise<void> {
+	const res = await apiFetch(`/api/v1/pins/${pinId}`, credentials, { method: 'DELETE' });
+	if (!res.ok) throw new Error(`Failed to soft-delete pin: ${res.status}`);
+}
+
+interface FetchRecycledPinsOptions {
+	cursor?: string;
+	pageSize?: number;
+	sort?: 'DELETED_AT_ASC' | 'DELETED_AT_DESC';
+}
+
+export async function fetchRecycledPins(
+	credentials: string,
+	opts?: FetchRecycledPinsOptions
+): Promise<PinPage> {
+	const params = new URLSearchParams();
+	if (opts?.cursor) params.set('cursor', opts.cursor);
+	if (opts?.pageSize) params.set('pageSize', String(opts.pageSize));
+	if (opts?.sort) params.set('sort', opts.sort);
+
+	const query = params.toString();
+	const path = `/api/v1/pins/recycled${query ? `?${query}` : ''}`;
+	const res = await apiFetch(path, credentials);
+
+	if (!res.ok) throw new Error(`Failed to fetch recycled pins: ${res.status}`);
+	return res.json();
+}
+
+export async function restorePin(credentials: string, pinId: string): Promise<Pin> {
+	const res = await apiFetch(`/api/v1/pins/recycled/${pinId}/restore`, credentials, {
+		method: 'POST'
+	});
+	if (!res.ok) throw new Error(`Failed to restore pin: ${res.status}`);
+	return res.json();
+}
+
+export async function permanentlyDeletePin(credentials: string, pinId: string): Promise<void> {
+	const res = await apiFetch(`/api/v1/pins/recycled/${pinId}`, credentials, {
+		method: 'DELETE'
+	});
+	if (!res.ok) throw new Error(`Failed to permanently delete pin: ${res.status}`);
+}
+
+export async function emptyRecycleBin(credentials: string): Promise<void> {
+	const res = await apiFetch('/api/v1/pins/recycled', credentials, { method: 'DELETE' });
+	if (!res.ok) throw new Error(`Failed to empty recycle bin: ${res.status}`);
+}
