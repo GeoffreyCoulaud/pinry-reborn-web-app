@@ -1,14 +1,29 @@
-/**
- * Shared TypeScript interfaces live here.
- * Re-export everything from domain-specific files as the project grows.
- */
+export interface Tag {
+	name: string;
+}
 
-/** Example domain entity — replace with your own. */
 export interface Pin {
 	id: string;
-	title: string;
-	imageUrl: string;
-	description?: string;
+	authorId: string;
+	sourceContextUrl: string;
+	sourceMediaUrl: string;
+	description: string;
+	tags: Tag[];
+}
+
+export interface PinPage {
+	pins: Pin[];
+	pagination: { previousCursor: string | null; nextCursor: string | null };
+}
+
+export interface PinSearchResult {
+	pin: Pin;
+	score: number;
+}
+
+export interface TagSearchResult {
+	tag: Tag;
+	score: number;
 }
 
 export interface UserResponse {

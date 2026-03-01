@@ -30,6 +30,13 @@
   }
 }
 
+/* Masonry grid layout */
+.masonry { columns: 1; gap: 1rem; }
+@media (min-width: 640px) { .masonry { columns: 2; } }
+@media (min-width: 1024px) { .masonry { columns: 3; } }
+@media (min-width: 1280px) { .masonry { columns: 4; } }
+.masonry > * { break-inside: avoid; margin-bottom: 1rem; }
+
 /* Register as Tailwind utilities — "inline" ensures var() refs resolve at runtime */
 @theme inline {
   --color-bg: var(--app-bg);

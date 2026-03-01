@@ -4,8 +4,17 @@
 	import { Toaster } from 'svelte-sonner';
 	import { m } from '$lib/paraglide/messages.js';
 	import { locales, getLocale, setLocale, type Locale } from '$lib/paraglide/runtime.js';
+	import CreatePinDialog from '$lib/components/CreatePinDialog.svelte';
+	import SearchBar from '$lib/components/SearchBar.svelte';
+	import type { Pin } from '$lib/types';
 
 	let { children, data } = $props();
+	let createDialogOpen = $state(false);
+
+	function handlePinCreated(pin: Pin) {
+		// Dispatch a custom event so the home page can prepend it
+		window.dispatchEvent(new CustomEvent('pin-created', { detail: pin }));
+	}
 </script>
 
 <Toaster />
@@ -13,35 +22,45 @@
 <div class="min-h-screen bg-bg text-text">
 	{#if data.username}
 		<nav class="border-b border-border bg-surface px-6 py-3">
-			<div class="mx-auto flex max-w-5xl items-center gap-6">
-				<a href="/" class="text-lg font-semibold">{m.nav_brand()}</a>
-				<a href="/example" class="text-sm text-text-muted hover:text-text">{m.nav_example()}</a>
-				<div class="ml-auto flex items-center gap-4">
-					<span class="text-sm text-text-muted">{data.username}</span>
-					<form method="POST" action="/logout" use:enhance>
-						<button
-							type="submit"
-							class="text-sm text-text-muted hover:text-text"
-						>
-							{m.auth_logout()}
-						</button>
-					</form>
-					<select
-						value={getLocale()}
-						onchange={(e) => setLocale(e.currentTarget.value as Locale)}
-						class="rounded border border-border-muted bg-surface px-2 py-1 text-sm"
-						aria-label="Language"
+			<div class="mx-auto flex items-center gap-4">
+				<a href="/" class="shrink-0 text-lg font-semibold">{m.nav_brand()}</a>
+
+				<SearchBar />
+
+				<button
+					type="button"
+					onclick={() => (createDialogOpen = true)}
+					class="shrink-0 rounded bg-accent px-3 py-1.5 text-sm font-medium text-white hover:bg-accent-hover"
+				>
+					+ {m.pin_new()}
+				</button>
+
+				<span class="text-sm text-text-muted">{data.username}</span>
+				<form method="POST" action="/logout" use:enhance>
+					<button
+						type="submit"
+						class="text-sm text-text-muted hover:text-text"
 					>
-						{#each locales as locale}
-							<option value={locale}>{locale.toUpperCase()}</option>
-						{/each}
-					</select>
-				</div>
+						{m.auth_logout()}
+					</button>
+				</form>
+				<select
+					value={getLocale()}
+					onchange={(e) => setLocale(e.currentTarget.value as Locale)}
+					class="rounded border border-border-muted bg-surface px-2 py-1 text-sm"
+					aria-label="Language"
+				>
+					{#each locales as locale}
+						<option value={locale}>{locale.toUpperCase()}</option>
+					{/each}
+				</select>
 			</div>
 		</nav>
+
+		<CreatePinDialog bind:open={createDialogOpen} oncreated={handlePinCreated} />
 	{/if}
 
-	<main class="mx-auto max-w-5xl px-6 py-8">
+	<main class="px-6 py-8">
 		{@render children()}
 	</main>
 </div>

@@ -25,7 +25,8 @@ export const actions: Actions = {
 			if (!response.ok) {
 				return fail(500, { error: 'server_error', username });
 			}
-		} catch {
+		} catch (e) {
+			console.error('Login failed:', e);
 			return fail(500, { error: 'server_error', username });
 		}
 
@@ -55,7 +56,8 @@ export const actions: Actions = {
 			if (!response.ok) {
 				return fail(500, { error: 'server_error', username });
 			}
-		} catch {
+		} catch (e) {
+			console.error('Signup failed:', e);
 			return fail(500, { error: 'server_error', username });
 		}
 
