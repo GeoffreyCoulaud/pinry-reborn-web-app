@@ -91,7 +91,7 @@ export async function softDeletePin(credentials: string, pinId: string): Promise
 interface FetchRecycledPinsOptions {
 	cursor?: string;
 	pageSize?: number;
-	sort?: 'DELETED_AT_ASC' | 'DELETED_AT_DESC';
+	sort?: 'CREATED_AT_ASC' | 'CREATED_AT_DESC' | 'DELETED_AT_DESC';
 }
 
 export async function fetchRecycledPins(
