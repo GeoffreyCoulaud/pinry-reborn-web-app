@@ -6,15 +6,8 @@
 	import { locales, getLocale, setLocale, type Locale } from '$lib/paraglide/runtime.js';
 	import CreatePinDialog from '$lib/components/CreatePinDialog.svelte';
 	import SearchBar from '$lib/components/SearchBar.svelte';
-	import type { Pin } from '$lib/types';
-
 	let { children, data } = $props();
 	let createDialogOpen = $state(false);
-
-	function handlePinCreated(pin: Pin) {
-		// Dispatch a custom event so the home page can prepend it
-		window.dispatchEvent(new CustomEvent('pin-created', { detail: pin }));
-	}
 </script>
 
 <Toaster />
@@ -70,7 +63,7 @@
 			</div>
 		</nav>
 
-		<CreatePinDialog bind:open={createDialogOpen} oncreated={handlePinCreated} />
+		<CreatePinDialog bind:open={createDialogOpen} />
 	{/if}
 
 	<main class="px-6 py-8">
