@@ -1,15 +1,17 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { pushState } from '$app/navigation';
 	import { page } from '$app/stores';
 	import PinCard from '$lib/components/PinCard.svelte';
 	import PinDetailDialog from '$lib/components/PinDetailDialog.svelte';
 	import { m } from '$lib/paraglide/messages.js';
-	import type { Pin } from '$lib/types';
+	import { pinsStore } from '$lib/stores/pins.svelte.js';
 
-	let { data } = $props();
 	let modalOpen = $state(true);
 
-	function handlePinClick(pin: Pin) {
+	function handlePinClick(pinId: string) {
+		const pin = pinsStore.pins.find((p) => p.id === pinId);
+		if (!pin) return;
 		modalOpen = true;
 		pushState(`/pins/${pin.id}`, { showPinModal: true, pin });
 	}
@@ -17,14 +19,21 @@
 	function handleModalClose() {
 		history.back();
 	}
+
+	onMount(() => {
+		const q = $page.url.searchParams.get('q') ?? '';
+		pinsStore.search(q);
+	});
 </script>
 
-{#if data.results.length === 0}
+{#if pinsStore.loading}
+	<p class="py-12 text-center text-text-muted">{m.loading_more()}</p>
+{:else if pinsStore.pins.length === 0}
 	<p class="py-12 text-center text-text-muted">{m.search_no_results()}</p>
 {:else}
 	<div class="masonry">
-		{#each data.results as pin (pin.id)}
-			<PinCard {pin} onclick={() => handlePinClick(pin)} />
+		{#each pinsStore.pins as pin (pin.id)}
+			<PinCard {pin} onclick={() => handlePinClick(pin.id)} />
 		{/each}
 	</div>
 {/if}
