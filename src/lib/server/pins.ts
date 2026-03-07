@@ -32,7 +32,7 @@ export async function fetchPin(credentials: string, pinId: string): Promise<Pin>
 
 export async function createPin(
 	credentials: string,
-	body: { sourceContextUrl?: string; sourceMediaUrl: string; description?: string }
+	body: { sourceContextUrl?: string; sourceMediaUrl: string; description: string }
 ): Promise<Pin> {
 	const res = await apiFetch('/api/v1/pins', credentials, {
 		method: 'POST',
