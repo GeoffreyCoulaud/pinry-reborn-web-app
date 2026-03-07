@@ -3,6 +3,7 @@
 	import { toast } from 'svelte-sonner';
 	import { m } from '$lib/paraglide/messages.js';
 	import PinDetail from './PinDetail.svelte';
+	import { pinsStore } from '$lib/stores/pins.svelte.js';
 	import type { Pin } from '$lib/types';
 
 	let {
@@ -17,12 +18,10 @@
 
 	async function handleDelete() {
 		try {
-			const res = await fetch(`/api/pins/${pin.id}`, { method: 'DELETE' });
-			if (!res.ok) throw new Error();
+			await pinsStore.softDeletePin(pin.id);
 			toast.success(m.pin_deleted());
 			open = false;
 			onclose();
-			window.dispatchEvent(new CustomEvent('pin-deleted', { detail: pin }));
 		} catch {
 			toast.error(m.pin_delete_error());
 		}
