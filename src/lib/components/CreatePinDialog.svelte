@@ -2,14 +2,12 @@
 	import { Dialog } from 'bits-ui';
 	import { toast } from 'svelte-sonner';
 	import { m } from '$lib/paraglide/messages.js';
-	import type { Pin } from '$lib/types';
+	import { pinsStore } from '$lib/stores/pins.svelte.js';
 
 	let {
-		open = $bindable(false),
-		oncreated
+		open = $bindable(false)
 	}: {
 		open: boolean;
-		oncreated: (pin: Pin) => void;
 	} = $props();
 
 	let sourceMediaUrl = $state('');
@@ -31,21 +29,12 @@
 		submitting = true;
 
 		try {
-			const res = await fetch('/api/pins', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					sourceMediaUrl: sourceMediaUrl.trim(),
-					sourceContextUrl: sourceContextUrl.trim() || undefined,
-					description: description.trim() || undefined
-				})
+			await pinsStore.createPin({
+				sourceMediaUrl: sourceMediaUrl.trim(),
+				sourceContextUrl: sourceContextUrl.trim() || undefined,
+				description: description.trim()
 			});
-
-			if (!res.ok) throw new Error('Failed to create pin');
-
-			const pin: Pin = await res.json();
 			toast.success(m.pin_created());
-			oncreated(pin);
 			open = false;
 			reset();
 		} catch {
