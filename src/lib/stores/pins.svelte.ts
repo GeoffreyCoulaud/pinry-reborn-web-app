@@ -10,8 +10,6 @@ class PinsStore {
 	reset() {
 		this.pins = [];
 		this.nextCursor = null;
-		this.loading = false;
-		this.loadingMore = false;
 		this.error = null;
 	}
 
@@ -40,6 +38,8 @@ class PinsStore {
 			const pg = await res.json();
 			this.pins = [...this.pins, ...pg.pins];
 			this.nextCursor = pg.nextCursor;
+		} catch {
+			this.error = 'Failed to load more pins';
 		} finally {
 			this.loadingMore = false;
 		}
@@ -83,9 +83,13 @@ class PinsStore {
 	}
 
 	async softDeletePin(pinId: string): Promise<void> {
+		const prev = this.pins;
 		this.pins = this.pins.filter((p) => p.id !== pinId);
 		const res = await fetch(`/api/pins/${pinId}`, { method: 'DELETE' });
-		if (!res.ok) throw new Error('Failed to delete pin');
+		if (!res.ok) {
+			this.pins = prev;
+			throw new Error('Failed to delete pin');
+		}
 	}
 
 	async search(query: string): Promise<void> {
@@ -129,21 +133,31 @@ class PinsStore {
 			const pg = await res.json();
 			this.pins = [...this.pins, ...pg.pins];
 			this.nextCursor = pg.nextCursor;
+		} catch {
+			this.error = 'Failed to load more pins';
 		} finally {
 			this.loadingMore = false;
 		}
 	}
 
 	async restorePin(pinId: string): Promise<void> {
+		const prev = this.pins;
 		this.pins = this.pins.filter((p) => p.id !== pinId);
 		const res = await fetch(`/api/pins/recycled/${pinId}/restore`, { method: 'POST' });
-		if (!res.ok) throw new Error('Failed to restore pin');
+		if (!res.ok) {
+			this.pins = prev;
+			throw new Error('Failed to restore pin');
+		}
 	}
 
 	async permanentlyDeletePin(pinId: string): Promise<void> {
+		const prev = this.pins;
 		this.pins = this.pins.filter((p) => p.id !== pinId);
 		const res = await fetch(`/api/pins/recycled/${pinId}`, { method: 'DELETE' });
-		if (!res.ok) throw new Error('Failed to permanently delete pin');
+		if (!res.ok) {
+			this.pins = prev;
+			throw new Error('Failed to permanently delete pin');
+		}
 	}
 
 	async emptyRecycleBin(): Promise<void> {
