@@ -3,6 +3,7 @@
 	import { DropdownMenu } from 'bits-ui';
 	import { m } from '$lib/paraglide/messages.js';
 	import TagEditor from './TagEditor.svelte';
+	import { pinsStore } from '$lib/stores/pins.svelte.js';
 	import type { Pin } from '$lib/types';
 
 	let {
@@ -14,22 +15,11 @@
 	} = $props();
 
 	async function handleTagsChange(tags: string[]) {
-		// Optimistic update
-		const prev = pin.tags;
-		pin.tags = tags.map((name) => ({ name }));
-
 		try {
-			const res = await fetch(`/api/pins/${pin.id}/tags`, {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ tags })
-			});
-			if (!res.ok) throw new Error();
-			const updated: Pin = await res.json();
+			const updated = await pinsStore.updateTags(pin.id, tags);
 			pin.tags = updated.tags;
 			toast.success(m.tags_updated());
 		} catch {
-			pin.tags = prev;
 			toast.error(m.tags_update_error());
 		}
 	}
